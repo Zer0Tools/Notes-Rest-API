@@ -3,20 +3,20 @@ using Zer0Tools.NotesWebAPI.Models;
 
 namespace Zer0Tools.NotesWebAPI.Repositories
 {
-    public abstract class RepositoryBase<T> : IRepository<T> where T : ModelBase
+    public abstract class Repository<T> where T : Model
     {
         protected readonly ApplicationContext _context;
-        
-        public RepositoryBase(ApplicationContext context)
+        public Repository(ApplicationContext context)
         {
             _context = context;
         }
         public virtual async Task<List<T>> GetAllItems() => await _context.Set<T>().ToListAsync<T>();
+
         public virtual async Task<T> GetItemAsync(Guid id)
         {
             T? Tmodel = await _context.FindAsync<T>(new object[] {id});
-            return Tmodel is null
-                ? throw new KeyNotFoundException("model not found")
+            return Tmodel is null ? 
+                throw new KeyNotFoundException("model not found")
                 : Tmodel; 
         }
         public virtual async Task AddItemAsync(T model)
@@ -26,6 +26,7 @@ namespace Zer0Tools.NotesWebAPI.Repositories
             else throw new ArgumentException("same model"); 
             await SaveAsync();
         }
+
         public virtual async Task AddItemsAsync(params T[] list)
         {
             foreach(var model in list)
@@ -52,13 +53,10 @@ namespace Zer0Tools.NotesWebAPI.Repositories
         }
         public virtual async Task UpdateItemAsync(T newModel)
         {
-            T? Tmodel = await _context.FindAsync<T>(new object[] {newModel.Id});
-            if(Tmodel is null) throw new KeyNotFoundException("model not found");
-            _context.Remove<T>(Tmodel);
-            _context.Add(newModel);
+            _context.Update(newModel);
             await SaveAsync();      
         }
 
-    public virtual async Task SaveAsync() => await _context.SaveChangesAsync();
+        public virtual async Task SaveAsync() => await _context.SaveChangesAsync();
     }
 }

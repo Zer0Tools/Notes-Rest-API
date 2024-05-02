@@ -1,11 +1,6 @@
-
-
-using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
-
 namespace Zer0Tools.NotesWebAPI.Models
 {
-    public class NoteModel : ModelBase
+    public class NoteModel : Model
     {
         public string Title {get; set;} = string.Empty;
 

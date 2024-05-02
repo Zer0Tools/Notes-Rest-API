@@ -10,7 +10,7 @@ RegisterServices(builder.Services);
 var app = builder.Build();
 Configure(app);
 
-var apis = app.Services.GetServices<IAPI>();
+var apis = app.Services.GetServices<API>();
 foreach(var api in apis)
 {
     if(api is null) throw new InvalidProgramException("Api not found");
@@ -22,18 +22,15 @@ app.Run();
 void RegisterServices(IServiceCollection services)
 {
     services.AddEndpointsApiExplorer();
-    services.AddSwaggerGen( c=> 
-    {
-        c.SchemaFilter<EnumSchemaFilter>();
-    });
+    services.AddSwaggerGen();
 
     services.AddDbContext<ApplicationContext>(options =>
     {
         options.UseSqlite(builder.Configuration.GetConnectionString("Sqlite"));
     });    
 
-    services.AddScoped<INotesRepository, NotesRepository>();  
-    services.AddTransient<IAPI, NoteAPI>(); 
+    services.AddScoped<NotesRepository>();  
+    services.AddTransient<API, NoteAPI>(); 
     services.AddAutoMapper(typeof(NoteMappingProfile));
     services.AddControllers().AddJsonOptions(options =>
     {

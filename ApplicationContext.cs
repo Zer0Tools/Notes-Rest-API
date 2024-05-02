@@ -10,9 +10,6 @@ public class ApplicationContext : DbContext
         // modelBuilder.Entity<NoteModel>()
         //     .Property(b => b.Id)
         //     .HasDefaultValueSql("NewGuid()");
-        // modelBuilder.Entity<UserModel>()
-        //     .Property(b => b.Id)
-        //     .HasDefaultValueSql("NewGuid()");    
     }
 
 }

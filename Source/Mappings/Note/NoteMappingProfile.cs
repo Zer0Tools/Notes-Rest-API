@@ -9,7 +9,7 @@ namespace Zer0Tools.NotesWebAPI.Mappings
         public NoteMappingProfile()
         {
             CreateMap<API.DTO.NoteDTO, Repositories.DTO.NoteDTO>()
-            .ForMember(dest => dest.RequestDate, opt => opt.MapFrom(src => DateTime.Parse(src.RequestTime, CultureInfo.InvariantCulture)));
+            .ForMember(dest => dest.RequestDate, opt => opt.MapFrom(src => DateTime.Now));
             CreateMap<Repositories.DTO.NoteDTO, Models.NoteModel>();
         }
     }

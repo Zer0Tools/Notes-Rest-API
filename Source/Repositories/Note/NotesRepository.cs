@@ -2,11 +2,9 @@ using Zer0Tools.NotesWebAPI.Models;
 using Zer0Tools.NotesWebAPI.Repositories.DTO;
 namespace Zer0Tools.NotesWebAPI.Repositories
 {
-    public class NotesRepository : RepositoryBase<NoteModel>, INotesRepository
+    public class NotesRepository : Repository<NoteModel>
     {
         private readonly IMapper _mapper;
-        private bool disposedValue;
-
         public NotesRepository(ApplicationContext context, IMapper mapper) : base(context)
         {
             _mapper = mapper;
@@ -29,29 +27,13 @@ namespace Zer0Tools.NotesWebAPI.Repositories
 
         public async Task UpdateNoteAsync(NoteDTO noteDTO, Guid noteId)
         {                             
-            var noteModel = _mapper.Map<NoteDTO, NoteModel>(noteDTO);
-            noteModel.UpdateDate = noteDTO.RequestDate;
-            noteModel.Id = noteId;
-            await base.UpdateItemAsync(noteModel);
+            var model = await GetNoteAsync(noteId);
+            model.UpdateDate = noteDTO.RequestDate;
+            model.Title = noteDTO.Title;
+            model.Details = noteDTO.Details;
+            await base.UpdateItemAsync(model);
         }
 
         public async Task DeleteNoteAsync(Guid noteId) => await base.DeleteItemAsync(noteId);
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (!disposedValue)
-            {
-                if (disposing)
-                    _context.Dispose();
-                disposedValue = true;
-            }
-        }
-
-        public void Dispose()
-        {
-            // Не изменяйте этот код. Разместите код очистки в методе "Dispose(bool disposing)".
-            Dispose(disposing: true);
-            GC.SuppressFinalize(this);
-        }
     }
 }
