@@ -7,9 +7,6 @@ public class ApplicationContext : DbContext
     public DbSet<NoteModel> Notes => Set<NoteModel>();
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        // modelBuilder.Entity<NoteModel>()
-        //     .Property(b => b.Id)
-        //     .HasDefaultValueSql("NewGuid()");
     }
 
 }
